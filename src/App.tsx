@@ -1,5 +1,11 @@
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
+import LoginPage from './pages/Auth/LoginPage';
+import RegisterPage from './pages/Auth/RegisterPage';
+import { Route, Routes } from 'react-router-dom';
+import ProtectedRoute from './components/ProtectedRoute';
+import AdminDashboard from './pages/Admin/AdminDashboard';
+import AccountPage from './pages/Account/AccountPage';
 
 function App() {
   return (
@@ -11,7 +17,27 @@ function App() {
 
       {/* Dynamic Screen Viewer Content Area */}
       <main className="flex-1">
-        {/* TODO: We will build out React Router configurations inside here later this week */}
+        <Routes>
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
+           <Route
+            path="/account"
+            element={
+              <ProtectedRoute>
+                <AccountPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin"
+            element={
+              <ProtectedRoute requiredRole="ADMIN">
+                <AdminDashboard />
+              </ProtectedRoute>
+            }
+          />
+          {/* Home, Menu, etc. still pending their own scheduled sessions */}
+        </Routes>
       </main>
 
       {/* Global Bottom Footer Layout */}
