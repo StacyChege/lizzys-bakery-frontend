@@ -29,8 +29,11 @@ export default function RegisterPage() {
     return Object.keys(errors).length === 0;
   }
 
-  async function handleSubmit(e: FormEvent) {
+  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
+    // Force the browser to completely stand down and stay on this page
     e.preventDefault();
+    e.stopPropagation();
+    
     setError('');
     if (!validate()) return;
 
