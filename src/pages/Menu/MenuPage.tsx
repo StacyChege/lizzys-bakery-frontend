@@ -4,6 +4,7 @@ import { fetchProducts } from '../../api/products';
 import type Category from '../../types/Category';
 import type Product from '../../types/Product';
 import useDebounce from '../../hooks/useDebounce';
+import ProductCard from '../../components/ProductCard';
 
 export default function MenuPage() {
   // --- STATE ---
@@ -141,19 +142,7 @@ export default function MenuPage() {
         <>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
             {products.map((product) => (
-              <div
-                key={product.id}
-                className="border border-bakery-pink/20 rounded-xl p-4 bg-white shadow-sm hover:shadow-md transition-shadow"
-              >
-                <p className="font-semibold text-bakery-brown">{product.name}</p>
-                <p className="text-sm text-bakery-brown/60">{product.category}</p>
-                <p className="text-bakery-pink-dark font-medium mt-2">
-                  KES {Number(product.base_price).toLocaleString()}
-                </p>
-                {!product.is_available && (
-                  <p className="text-red-500 text-xs font-semibold mt-1">Sold Out</p>
-                )}
-              </div>
+              <ProductCard key={product.id} product={product} />
             ))}
           </div>
 
