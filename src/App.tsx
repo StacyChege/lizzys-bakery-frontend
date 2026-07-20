@@ -6,6 +6,7 @@ import { Route, Routes } from 'react-router-dom';
 import ProtectedRoute from './components/ProtectedRoute';
 import AdminDashboard from './pages/Admin/AdminDashboard';
 import AccountPage from './pages/Account/AccountPage';
+import MenuPage from './pages/Menu/MenuPage';
 
 function App() {
   return (
@@ -37,6 +38,7 @@ function App() {
             }
           />
           {/* Home, Menu, etc. still pending their own scheduled sessions */}
+          <Route path="/menu" element={<MenuPage />} />
         </Routes>
       </main>
 
