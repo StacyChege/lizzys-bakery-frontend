@@ -10,15 +10,15 @@ export default function MenuPage() {
   // --- STATE ---
   const [categories, setCategories] = useState<Category[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
-  
+
   // Filter & Search State
   const [selectedCategory, setSelectedCategory] = useState<string>(''); // '' means "All Categories"
   const [searchQuery, setSearchQuery] = useState<string>('');
   const debouncedSearch = useDebounce(searchQuery, 400); // Waits 400ms after user stops typing
 
   // Loading & Error states
-  const [isLoading, setIsLoading] = useState(true);          // Initial page load
-  const [isFiltering, setIsFiltering] = useState(false);      // Loading filtered results
+  const [isLoading, setIsLoading] = useState(true); // Initial page load
+  const [isFiltering, setIsFiltering] = useState(false); // Loading filtered results
   const [error, setError] = useState('');
 
   // --- 1. INITIAL LOAD (Runs ONCE when page opens) ---
@@ -100,12 +100,12 @@ export default function MenuPage() {
         />
       </div>
 
-      {/* --- CATEGORY FILTER PILLS --- */}
-      <div className="flex flex-wrap gap-2 mb-8">
+      {/* --- CATEGORY FILTER PILLS (Mobile horizontal scroll enabled) --- */}
+      <div className="flex gap-2 mb-8 overflow-x-auto pb-2 -mx-4 px-4 sm:mx-0 sm:px-0 sm:flex-wrap">
         {/* 'All' Category Pill */}
         <button
           onClick={() => setSelectedCategory('')}
-          className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${
+          className={`whitespace-nowrap px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${
             selectedCategory === ''
               ? 'bg-bakery-pink text-white'
               : 'bg-bakery-cream text-bakery-brown hover:bg-bakery-pink/20'
@@ -121,7 +121,7 @@ export default function MenuPage() {
             <button
               key={category.id}
               onClick={() => setSelectedCategory(category.name)}
-              className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${
+              className={`whitespace-nowrap px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${
                 isSelected
                   ? 'bg-bakery-pink text-white'
                   : 'bg-bakery-cream text-bakery-brown hover:bg-bakery-pink/20'
@@ -138,20 +138,26 @@ export default function MenuPage() {
         <div className="text-center py-12 text-bakery-brown/60">
           Updating menu...
         </div>
+      ) : products.length > 0 ? (
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+          {products.map((product) => (
+            <ProductCard key={product.id} product={product} />
+          ))}
+        </div>
       ) : (
-        <>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-            {products.map((product) => (
-              <ProductCard key={product.id} product={product} />
-            ))}
-          </div>
-
-          {products.length === 0 && (
-            <p className="text-center text-bakery-brown/60 mt-10">
-              No products match your search or filter.
-            </p>
-          )}
-        </>
+        /* --- UPGRADED EMPTY STATE --- */
+        <div className="text-center py-16">
+          <p className="font-script text-3xl text-bakery-pink-dark mb-2">
+            Nothing here yet!
+          </p>
+          <p className="text-bakery-brown/60">
+            {debouncedSearch
+              ? `No treats matching "${debouncedSearch}". Try a different search.`
+              : selectedCategory
+              ? "No products in this category right now — check back soon."
+              : "The menu is empty. Please check back later."}
+          </p>
+        </div>
       )}
     </div>
   );
